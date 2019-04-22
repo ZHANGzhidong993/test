@@ -28,6 +28,9 @@ public class ConnectionPoolTest {
             Thread thread = new Thread(new ConnectionRunner(count, got, notGot), "ConnectionRunnerThread");
             thread.start();
         }
+        /**
+         * 保证所有的runner同时开始执行run
+         */
         start.countDown();
         end.await();
         System.out.println("total invoke: " + (threadCount * count));
@@ -55,16 +58,22 @@ public class ConnectionPoolTest {
             }
             while (count > 0) {
                 try {
-                    Connection connection = pool.fetchConnection(1000);
+                    Connection connection = pool.fetchConnection(100);
                     if (connection != null) {
                         try {
                             connection.createStatement();
                             connection.commit();
                         } finally {
                             pool.releaseConnection(connection);
+                            /**
+                             * 成功获取并释放连接计数+1
+                             */
                             got.incrementAndGet();
                         }
                     } else {
+                        /**
+                         * 超时计数加一
+                         */
                         notGot.incrementAndGet();
                     }
                 } catch (Exception e) {

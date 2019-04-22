@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.LinkedList;
 
 /**
+ * 连接池
+ *
  * @author zhangzhidong
  * @create: 2019-04-17 23:14
  */
@@ -30,6 +32,9 @@ public class ConnectionPool {
 
     public Connection fetchConnection(long mills) throws InterruptedException {
         synchronized (pool) {
+            /**
+             * 不超时一直等待
+             */
             if (mills <= 0) {
                 while (pool.isEmpty()) {
                     pool.wait();
