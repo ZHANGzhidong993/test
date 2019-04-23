@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * 线程池
+ *
  * @author zhangzhidong
  * @since 2019/4/22
  */
@@ -63,6 +65,7 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
         if (job != null) {
             synchronized (jobs) {
                 jobs.addLast(job);
+                //notify比notifyAll开销更小
                 jobs.notify();
             }
         }
@@ -105,13 +108,16 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
         return jobs.size();
     }
 
+    /**
+     * 一个work就是一个线程池中的线程
+     */
     class Worker implements Runnable {
 
         private volatile boolean running = true;
 
         public void run() {
             while (running) {
-                Job job = null;
+                Job job;
                 synchronized (jobs) {
                     while (jobs.isEmpty()) {
                         try {
