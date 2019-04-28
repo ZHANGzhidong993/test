@@ -32,7 +32,7 @@ public class Mutex implements Lock {
         //释放锁，将状态设置为0
         protected boolean tryRelease(int releases) {
             if (getState() == 0) {
-                throw new IllegalArgumentException();
+                throw new IllegalMonitorStateException();
             }
             setExclusiveOwnerThread(null);
             setState(0);
