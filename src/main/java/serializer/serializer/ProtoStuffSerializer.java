@@ -2,6 +2,7 @@ package serializer.serializer;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
@@ -44,7 +45,14 @@ public class ProtoStuffSerializer implements ISerializer {
     }
 
     @Override
-    public <T> T deserialize(byte[] data, Class<T> clazz) {
-        return null;
+    public <T> T deserialize(byte[] data, Class<T> cls) {
+        try {
+            T message = objenesis.newInstance(cls);
+            Schema<T> schema = getSchema(cls);
+            ProtostuffIOUtil.mergeFrom(data, message, schema);
+            return message;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

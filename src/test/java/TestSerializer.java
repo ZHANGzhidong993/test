@@ -100,4 +100,17 @@ public class TestSerializer {
         AddressBookProtos.Person personCopy = serializer.deserialize(data, AddressBookProtos.Person.class);
         System.out.println(personCopy.getName());
     }
+
+    /**
+     * 34
+     */
+    @Test
+    public void testProtoStuffSerializer() {
+        ProtoStuffSerializer serializer = new ProtoStuffSerializer();
+        byte[] data = serializer.serialize(user);
+        System.out.println("size: " + data.length);
+        User user = serializer.deserialize(data, User.class);
+        System.out.println(user.getAge());
+    }
+
 }
