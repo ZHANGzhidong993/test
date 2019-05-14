@@ -1,8 +1,5 @@
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author zhangzhidong
  * @create: 2019-03-17 22:47
@@ -22,7 +19,7 @@ public class TestA {
                 }
             }
         }
-        System.out.println(two);
+
     }
 
     @Test
@@ -61,7 +58,7 @@ public class TestA {
         }
         l2str = l2str + l2.val;
 
-        Long sum = Long.parseLong(l1str) + Long.parseLong(l2str);
+        Long sum = Long.valueOf(l1str) + Long.valueOf(l2str);
         String sumstr = sum + "";
 
         ListNode head = null;
@@ -83,23 +80,10 @@ public class TestA {
         return head;
     }
 
-
     @Test
     public void testc() {
+        GenericType genericType = new GenericType();
 
-        boolean interrupted1 = Thread.interrupted();
-        System.out.println("1-" + interrupted1);
-        boolean interrupted2 = Thread.interrupted();
-        System.out.println("2-" + interrupted2);
+
     }
-
-    @Test
-    public void testd() {
-
-        Map<String, String> map = new ConcurrentHashMap<>();
-        map.put("A", "B");
-        map.put("B", "A");
-        System.out.println(map);
-    }
-
 }
