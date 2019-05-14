@@ -1,4 +1,5 @@
 import org.junit.Test;
+import serializer.pojo.AddressBookProtos;
 import serializer.pojo.User;
 import serializer.serializer.*;
 
@@ -10,6 +11,8 @@ public class TestSerializer {
 
     private User user;
 
+    private AddressBookProtos.Person person;
+
     {
         User user = new User();
         user.setTel("18668158627");
@@ -17,42 +20,49 @@ public class TestSerializer {
         user.setUsername("nihaohhh");
         user.setAge(18);
         this.user = user;
+
+
+        AddressBookProtos.Person person = AddressBookProtos.Person.newBuilder().setEmail("zzd@163.com").setId(10000).setName("zzd").addPhone
+                (AddressBookProtos.Person.PhoneNumber.newBuilder().setNumber("13300000000").setType(AddressBookProtos
+                        .Person.PhoneType.HOME).build()).build();
+
+        this.person = person;
     }
 
     /**
-     * 247
+     * 235
      */
     @Test
     public void testDefaultJavaSerializer() {
         DefaultJavaSerializer javaSerializer = new DefaultJavaSerializer();
-        byte[] serialize = javaSerializer.serialize(user);
+        byte[] serialize = javaSerializer.serialize(person);
         System.out.println("size: " + serialize.length);
-        User deserialize = javaSerializer.deserialize(serialize, User.class);
-        System.out.println(deserialize.getAge());
+        AddressBookProtos.Person deserialize = javaSerializer.deserialize(serialize, AddressBookProtos.Person.class);
+        System.out.println(deserialize.getName());
     }
 
     /**
-     * 287
+     * 312
      */
     @Test
     public void testXmlSerializer() {
         XmlSerializer xmlSerializer = new XmlSerializer();
-        byte[] serialize = xmlSerializer.serialize(user);
+        byte[] serialize = xmlSerializer.serialize(person);
         System.out.println("size: " + serialize.length);
-        User deserialize = xmlSerializer.deserialize(serialize, User.class);
-        System.out.println(deserialize.getAge());
+        AddressBookProtos.Person deserialize = xmlSerializer.deserialize(serialize, AddressBookProtos.Person.class);
+        System.out.println(deserialize.getName());
     }
 
     /**
-     * 205
+     * 104
      */
     @Test
     public void testXml2Serializer() {
         Xml2Serializer xmlSerializer = new Xml2Serializer();
-        byte[] serialize = xmlSerializer.serialize(user);
+        byte[] serialize = xmlSerializer.serialize(person);
         System.out.println("size: " + serialize.length);
-        User deserialize = xmlSerializer.deserialize(serialize, User.class);
-        System.out.println(deserialize.getAge());
+        AddressBookProtos.Person deserialize = xmlSerializer.deserialize(serialize, AddressBookProtos.Person.class);
+        System.out.println(deserialize.getName());
     }
 
     /**
@@ -61,23 +71,33 @@ public class TestSerializer {
     @Test
     public void testJSONSerializer() {
         JSONSerializer jsonSerializer = new JSONSerializer();
-        byte[] serialize = jsonSerializer.serialize(user);
+        byte[] serialize = jsonSerializer.serialize(person);
         System.out.println("size: " + serialize.length);
-        User deserialize = jsonSerializer.deserialize(serialize, User.class);
-        System.out.println(deserialize.getAge());
+        AddressBookProtos.Person deserialize = jsonSerializer.deserialize(serialize, AddressBookProtos.Person.class);
+        System.out.println(deserialize.getName());
     }
 
     /**
-     * 99
+     * 173
      */
     @Test
     public void testHessianSerializer() {
         HessianSerializer hessianSerializer = new HessianSerializer();
-        byte[] serialize = hessianSerializer.serialize(user);
+        byte[] serialize = hessianSerializer.serialize(person);
         System.out.println("size: " + serialize.length);
-        User deserialize = hessianSerializer.deserialize(serialize, User.class);
-        System.out.println(deserialize.getAge());
+        AddressBookProtos.Person deserialize = hessianSerializer.deserialize(serialize, AddressBookProtos.Person.class);
+        System.out.println(deserialize.getName());
     }
 
-
+    /**
+     * 38
+     */
+    @Test
+    public void testProtoBufSerializer() {
+        ProtoBufSerializer serializer = new ProtoBufSerializer();
+        byte[] data = serializer.serialize(person);
+        System.out.println("size: " + data.length);
+        AddressBookProtos.Person personCopy = serializer.deserialize(data, AddressBookProtos.Person.class);
+        System.out.println(personCopy.getName());
+    }
 }
